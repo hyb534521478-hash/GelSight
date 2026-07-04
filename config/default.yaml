@@ -1,0 +1,64 @@
+# Ubuntu22.04 默认路径。工程复制到桌面后基本不用改。
+project_root: ~/桌面/视触觉传感器标定/Gelsight标定/gelsight_force_calibration_project
+force_root: ~/桌面/视触觉传感器标定/Gelsight标定/force
+image_root: ~/桌面/视触觉传感器标定/Gelsight标定/force/new_output
+output_root: ~/桌面/视触觉传感器标定/Gelsight标定/gelsight_force_calibration_project/outputs
+
+# 109个片段：force/new_output/1..109 对应 force/1.txt..109.txt
+episode_count: 109
+image_exts: [".png", ".jpg", ".jpeg", ".bmp"]
+
+alignment:
+  # 图像接触检测：用第一张图做背景，检测明显突变点
+  image_resize_width: 160
+  image_baseline_frames: 10
+  image_smooth_window: 5
+  image_threshold_k: 8.0
+  image_min_jump: 8.0
+  consecutive_frames: 2
+
+  # 力接触检测：用前段基线估计零点，检测力值首次明显离开零点
+  force_baseline_samples: 20
+  force_smooth_window: 5
+  force_threshold_k: 8.0
+  force_min_jump_n: 0.03
+  force_use_abs: true
+
+split:
+  train_ratio: 0.8
+  seed: 42
+  split_by: episode
+
+training:
+  image_size: 224
+  batch_size: 2
+  flow_batch_size: 64
+  epochs: 80
+  lr: 0.0001
+  weight_decay: 0.0001
+  num_workers: 4
+  accum_steps: 1
+  amp: true
+  pretrained_resnet: false
+  save_every: 10
+
+target:
+  columns: ["F", "theta", "alpha"]
+  # F来自拉力计插值后的真实力；theta/alpha来自图片文件名。
+  # theta/alpha的单位保持采集文件名里的原始单位，通常是角度。
+
+flow:
+  grid_x: 15
+  grid_y: 15
+  farneback_pyr_scale: 0.5
+  farneback_levels: 3
+  farneback_winsize: 21
+  farneback_iterations: 3
+  farneback_poly_n: 5
+  farneback_poly_sigma: 1.2
+
+realtime:
+  camera_index: 0
+  width: 640
+  height: 480
+  fps: 30

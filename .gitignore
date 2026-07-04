@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+outputs/runs/
+outputs/debug_alignment/
+outputs/aligned/*.csv
+outputs/splits/*.csv
+outputs/splits/*.txt
+*.pt
+*.pth
+.DS_Store
